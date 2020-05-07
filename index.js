@@ -1,5 +1,79 @@
-var express = require('express');
-var app = express();
+var express=require("express"); 
+var bodyParser=require("body-parser"); 
+
+//package de hashage des mdp
+bcrypt = require('bcrypt'),
+SALT_WORK_FACTOR = 10;
+
+const mongoose = require('mongoose'); 
+mongoose.connect('mongodb://localhost:27017/Projet-Trello'); 
+var db=mongoose.connection; 
+db.on('error', console.log.bind(console, "connection error")); 
+db.once('open', function(callback){ 
+    console.log("connection succeeded"); 
+}) 
+  
+var app=express() 
+  
+  
+app.use(bodyParser.json()); 
+app.use(express.static('public')); 
+app.use(bodyParser.urlencoded({ 
+    extended: true
+})); 
+  
+app.post('/sign_up', function(req,res){ 
+    var name = req.body.name;
+    var password = req.body.password; 
+    var email =req.body.email;
+    
+    //objet data 
+    var data = { 
+        "name": name, 
+        "password":password, //Il faudra Hasher le MDP (j'ai installer le packageBcrypt sur le projet  qui dois pouvoir hasher les mdp)
+        "email":email
+
+    } 
+// Ajout du user (obj data) en base
+db.collection('Users').insertOne(data,function(err, collection){ 
+        if (err) throw err; 
+        console.log("Record inserted Successfully"); 
+              
+    }); 
+
+    
+// NE MARCHE PAS -- Verification si nom du user existe déja en base
+
+/*db.collection('Users').findOne({name : req.body.name},function(err, result){ 
+    if (err) {
+        alert(err)
+        if (user) {
+            alert('this username is already taken. Please choose another.')
+            console.log('there was a user');
+            return false;
+
+        }
+    } 
+    });*/
+
+    // Redirection vers la page success après création du user en base          
+    return res.redirect('/signup_success'); 
+
+
+}); 
+  
+  
+app.get('/',function(req,res){ 
+res.set({ 
+    'Access-control-Allow-Origin': '*'
+    }); 
+return res.redirect('index.html'); 
+}).listen(8080) 
+  
+  
+console.log("server listening at port 3000"); 
+
+
 
 //server créé avec Express
 app.get('/', function(req, res) {
@@ -7,7 +81,7 @@ app.get('/', function(req, res) {
     res.render("index.ejs");
 });
 
-app.get('/sign-up', function(req, res) {
+app.get('/signup', function(req, res) {
 
     res.render("signUp.ejs");
 });
@@ -41,6 +115,10 @@ app.get('/Git-commit', function(req, res) {
 
     res.render("gitCommit.ejs");
 });
+app.get('/signup_success', function(req, res) {
+
+    res.render("signup_success.ejs");
+});
 
 
 
@@ -69,7 +147,6 @@ app.get('/vendor/bootstrap/js/bootstrap.bundle.min.js', function(req, res) {
 
 
 
-
 // on defini le port sur lequel on ecoute
 //server.listen(8080)
-app.listen (8080);
+//app.listen (8080);

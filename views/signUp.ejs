@@ -56,35 +56,29 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-            <h3 class="text-center">
-              Welcome in Trello Project
-            </h3>
+            <h3 class="text-center">Welcome in Trello Project</h3>
 
-            
             <div class="row">
                 <div class=" center-block">
-                    
-                    <div class="form-group">
-                      <label for="InputEmail">
-                        Username
-                    </label>
-                    <input style="width: 500px;" type="text" class="form-control" id="InputEmail" required/>
-            
-                        <label for="InputPassword">
-                            Password
-                        </label>
-                        <input style="width:500px ;" type="password" class="form-control" id="InputPassword" required/>
 
-                        <label for="InputEmail">
-                          Email
-                      </label>
-                      <input style="width:500px ;" type="text" class="form-control" id="InputEmail" required />
+                    <form action="/sign_up" method="post"> 
+
+                    <div class="form-group">
+                    <label for="InputEmail">Username</label>
+                    <input style="width: 500px;" type="text" class="form-control" id="InputName"  name="name"  required/>
+            
+                    <label for="InputPassword">Password</label>
+                    <input style="width:500px ;" type="password" class="form-control" id="InputPassword" name="password" required/>
+
+                    <label for="InputEmail">Email</label>
+                    <input style="width:500px ;" type="text" class="form-control" placeholder="exemple@domain.com" name="email" id="InputEmail" required />
+                    
                     </div>
                     <div class="form-group ">
-            
                         <div class=" text-center">
-                            <button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">Finish</button>
+                            <input type="submit" id="submitDetails"  name="submitDetails" value="Submit" class="btn btn-primary"/>
                             <a href="/">Back</a>  
+                    </form>       
                         </div>
                     </div>
                 </div>
