@@ -1,27 +1,12 @@
-var express=require("express"); 
-var bodyParser=require("body-parser"); 
+var express=require("express");
+var app=express();  
+var bodyParser=require("body-parser");
+ 
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/Projet-Trello";
 
-//package de hashage des mdp
-bcrypt = require('bcrypt'),
-SALT_WORK_FACTOR = 10;
+app.use(express.urlencoded({ extended: true }));
 
-const mongoose = require('mongoose'); 
-mongoose.connect('mongodb://localhost:27017/Projet-Trello'); 
-var db=mongoose.connection; 
-db.on('error', console.log.bind(console, "connection error")); 
-db.once('open', function(callback){ 
-    console.log("connection succeeded"); 
-}) 
-  
-var app=express() 
-  
-  
-app.use(bodyParser.json()); 
-app.use(express.static('public')); 
-app.use(bodyParser.urlencoded({ 
-    extended: true
-})); 
-  
 app.post('/sign_up', function(req,res){ 
     var name = req.body.name;
     var password = req.body.password; 
@@ -33,62 +18,51 @@ app.post('/sign_up', function(req,res){
         "password":password, //Il faudra Hasher le MDP (j'ai installer le packageBcrypt sur le projet  qui dois pouvoir hasher les mdp)
         "email":email
 
-    } 
-// Ajout du user (obj data) en base
-db.collection('Users').insertOne(data,function(err, collection){ 
-        if (err) throw err; 
-        console.log("Record inserted Successfully"); 
-              
-    }); 
+    }
 
-    
-// NE MARCHE PAS -- Verification si nom du user existe déja en base
-
-/*db.collection('Users').findOne({name : req.body.name},function(err, result){ 
-    if (err) {
-        alert(err)
-        if (user) {
-            alert('this username is already taken. Please choose another.')
-            console.log('there was a user');
-            return false;
-
-        }
-    } 
-    });*/
-
-    // Redirection vers la page success après création du user en base          
-    return res.redirect('/signup_success'); 
-
-
+    MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+        if (err) throw err;
+        var dbo = db.db("Projet-Trello");
+        if (err) throw err;
+        // Ajout du user (obj data) en base
+        dbo.collection('users').insertOne(data,function(err, collection){ 
+            if (err) throw err; 
+            console.log("Record inserted Successfully"); 
+            db.close();
+            res.redirect('/');
+        });
+    });
 }); 
-  
-  
-app.get('/',function(req,res){ 
-res.set({ 
-    'Access-control-Allow-Origin': '*'
-    }); 
-return res.redirect('index.html'); 
-}).listen(8080) 
-  
-  
-console.log("server listening at port 3000"); 
-
+ 
 
 
 //server créé avec Express
+// route des pages
 app.get('/', function(req, res) {
 
     res.render("index.ejs");
 });
 
-app.get('/signup', function(req, res) {
+app.get('/sign-up', function(req, res) {
 
     res.render("signUp.ejs");
 });
 
 app.get('/my-projects', function(req, res) {
-
-    res.render("myProjects.ejs");
+    MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("Projet-Trello");
+        if (err) throw err;
+        //récupérer tout de la collection "projects"
+	    //*
+	    dbo.collection("customers").find({}).toArray(function(err, result) {
+	        if (err) throw err;
+	        console.log(result);
+            db.close();
+            res.render("myProjects.ejs",{projets: result});
+	    });	
+        //*/
+    });	    
 });
 
 app.get('/tasks', function(req, res) {
@@ -148,5 +122,5 @@ app.get('/vendor/bootstrap/js/bootstrap.bundle.min.js', function(req, res) {
 
 
 // on defini le port sur lequel on ecoute
-//server.listen(8080)
-//app.listen (8080);
+// server.listen(8080)
+app.listen (8080);

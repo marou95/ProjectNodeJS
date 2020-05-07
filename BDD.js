@@ -45,34 +45,106 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
     //*/
 });
 
+
+//créer la collection du contenu d'un projet et insert le nom dans "projects" (liste des projets)
 MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
     if (err) throw err;
     var dbo = db.db("Projet-Trello");
     if (err) throw err;
-    //créer la collection du contenu d'un projet et insert le nom dans "projects" (liste des projets)
     //correspond au nom du projet crée
     var myproject = { name: "projet1"};
     //*
     dbo.createCollection(myproject.name,   function(err, res) {
         if (err) throw err;
-        console.log("Collection \""+ myproject.name +"\" created!"); 
+        console.log("Collection \""+ myproject +"\" created!"); 
        
         dbo.collection("projects").insertOne(myproject, function(err, res) {
             if (err) throw err;
             console.log("1 project inserted");
-            console.log(myproject.name);
+            console.log(myproject);
         });
         db.close();
     });
     //*/
-
-    //récupérer tout
-	/*
-	dbo.collection("projects").find({}).toArray(function(err, result) {
-	    if (err) throw err;
-        console.log(result[0]._id);
+});
+MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("Projet-Trello");
+    if (err) throw err;
+    //correspond au nom du projet crée
+    var myproject = { name: "projet2"};
+    //*
+    dbo.createCollection(myproject.name,   function(err, res) {
+        if (err) throw err;
+        console.log("Collection \""+ myproject +"\" created!"); 
+       
+        dbo.collection("projects").insertOne(myproject, function(err, res) {
+            if (err) throw err;
+            console.log("1 project inserted");
+            console.log(myproject);
+        });
         db.close();
-	});	
+    });
+    //*/
+});
+MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("Projet-Trello");
+    if (err) throw err;
+    //correspond au nom du projet crée
+    var myproject = { name: "projet3"};
+    //*
+    dbo.createCollection(myproject.name,   function(err, res) {
+        if (err) throw err;
+        console.log("Collection \""+ myproject +"\" created!"); 
+       
+        dbo.collection("projects").insertOne(myproject, function(err, res) {
+            if (err) throw err;
+            console.log("1 project inserted");
+            console.log(myproject);
+        });
+        db.close();
+    });
+    //*/
+});
+MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("Projet-Trello");
+    if (err) throw err;
+    //correspond au nom du projet crée
+    var myproject = { name: "projet4"};
+    //*
+    dbo.createCollection(myproject.name,   function(err, res) {
+        if (err) throw err;
+        console.log("Collection \""+ myproject +"\" created!"); 
+       
+        dbo.collection("projects").insertOne(myproject, function(err, res) {
+            if (err) throw err;
+            console.log("1 project inserted");
+            console.log(myproject);
+        });
+        db.close();
+    });
+    //*/
+});
+MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("Projet-Trello");
+    if (err) throw err;
+    //correspond au nom du projet crée
+    var myproject = { name: "projet5"};
+    //*
+    dbo.createCollection(myproject.name,   function(err, res) {
+        if (err) throw err;
+        console.log("Collection \""+ myproject +"\" created!"); 
+       
+        dbo.collection("projects").insertOne(myproject, function(err, res) {
+            if (err) throw err;
+            console.log("1 project inserted");
+            console.log(myproject);
+        });
+        db.close();
+    });
     //*/
 });
 
