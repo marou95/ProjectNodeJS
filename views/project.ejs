@@ -11,10 +11,10 @@
   <title>Trello Projects</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="css/simple-sidebar.css" rel="stylesheet">
+  <link href="../css/simple-sidebar.css" rel="stylesheet">
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet" />
 
@@ -66,7 +66,75 @@
 
 <!-- Page Content -->
 
- 
+<div class="container">
+  <form>
+  <!-- marge top-->
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Title : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+      <!-- si c'est un nouveau projet le titre est modifiable-->
+      <% if(projects == "new"){ %>
+        <div class="form-group">
+          <input type="text" class="form-control" id="InputTitle" name="title" />
+        </div>
+      <% } else { %>
+      <%= projects.name %>
+      <% } %>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Members : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+          <input type="text" class="form-control" id="InputMembers" name="members" />
+        </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <!-- marge top-->
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-2">
+    </div>
+    <div class="col-8">
+      <div class="form-group text-center">
+          <input type="Save" id="save"  name="save" value="Submit" class="btn btn-primary"/>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <div class="row">
+    <!-- marge à gauche-->
+    <div class="col-2">
+    </div>
+    <div class="col-8">
+      <div class="form-group  text-center">
+        <a href="/my-projects">Cancel</a>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+</form>
+</div>
 
 
 
@@ -76,8 +144,8 @@
   <!-- /#wrapper -->
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/jquery/jquery.min.js"></script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Menu Toggle Script -->
   <script>

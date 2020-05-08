@@ -17,7 +17,6 @@ app.post('/sign_up', function(req,res){
         "name": name, 
         "password":password, //Il faudra Hasher le MDP (j'ai installer le packageBcrypt sur le projet  qui dois pouvoir hasher les mdp)
         "email":email
-
     }
 
     MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
@@ -32,6 +31,7 @@ app.post('/sign_up', function(req,res){
             res.redirect('/');
         });
     });
+    
 }); 
  
 
@@ -55,11 +55,11 @@ app.get('/my-projects', function(req, res) {
         if (err) throw err;
         //récupérer tout de la collection "projects"
 	    //*
-	    dbo.collection("customers").find({}).toArray(function(err, result) {
+	    dbo.collection("projects").find({}).sort({ name: 1 }).toArray(function(err, result) {
 	        if (err) throw err;
 	        console.log(result);
             db.close();
-            res.render("myProjects.ejs",{projets: result});
+            res.render("myProjects.ejs",{projects: result});
 	    });	
         //*/
     });	    
@@ -70,9 +70,32 @@ app.get('/tasks', function(req, res) {
     res.render("tasks.ejs");
 });
 
-app.get('/new-project', function(req, res) {
+app.get('/project/:name', function(req, res) {
 
-    res.render("newProject.ejs");
+    MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("Projet-Trello");
+        if (err) throw err;
+        //récupérer tout de la collection "projects"
+        //*
+        console.log("id = " + req.params.name);
+        //dans le cas où l'on créer un nouveau projet
+        if(req.params.name == 'new'){
+            console.log("new project !");
+            res.render("project.ejs",{projects: req.params.name});
+        }
+        //sinon doit aller chercher les infos du projet sélectionné
+        else{
+            dbo.collection("projects").findOne({name: req.params.name}, function(err, result) {
+                if (err) throw err;
+                console.log(result);
+                db.close();
+                res.render("project.ejs",{projects: result});
+            });
+        }
+	
+        //*/
+    });	
 });
 
 app.get('/task-detail', function(req, res) {

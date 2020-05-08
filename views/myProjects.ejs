@@ -73,7 +73,7 @@
     <div class="col-2">
     </div>
     <div class="col-8">
-      <a href="newProject.ejs">New project</a>
+      <a href="/project/new">New project</a>
     </div>
     <div class="col-2">
     </div>
@@ -84,8 +84,15 @@
     <div class="col-2">
     </div>
     <div class="col-8">
-      <table>
-        
+      <table class="table table-striped">
+ 	      <%
+    	    for(var j = 0 ; j < projects.length ; j++) {
+        %>
+          <tr>
+             <td><%= projects[j].name %></td>
+             <td class="text-right"><a href="/project/<%= projects[j].name%>">Modifier</a></td>
+	        </tr>
+        <% } %>
       </table>
     </div>
     <div class="col-2">
