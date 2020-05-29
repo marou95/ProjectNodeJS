@@ -67,8 +67,12 @@
 <!-- Page Content -->
 
 <div class="container">
-  <form>
-  <!-- marge top-->
+  <% if(project == "new"){ %>
+  <form action="/save_project/new" method="POST">
+  <% } else { %>
+  <form action="/save_project/<%= project.name %>" method="POST">
+  <% } %>
+    <!-- marge top-->
   <div class="row mt-5">
     <!-- marge à gauche-->
     <div class="col-1">
@@ -80,12 +84,12 @@
     </div>
     <div class="col-6">
       <!-- si c'est un nouveau projet le titre est modifiable-->
-      <% if(projects == "new"){ %>
+      <% if(project == "new"){ %>
         <div class="form-group">
           <input type="text" class="form-control" id="InputTitle" name="title" />
         </div>
       <% } else { %>
-      <%= projects.name %>
+      <%= project.name %>
       <% } %>
     </div>
     <div class="col-2">
@@ -115,7 +119,7 @@
     </div>
     <div class="col-8">
       <div class="form-group text-center">
-          <input type="Save" id="save"  name="save" value="Submit" class="btn btn-primary"/>
+          <input type="submit" id="save"  name="save" value="save" class="btn btn-primary"/>
       </div>
     </div>
     <div class="col-2">
@@ -138,7 +142,7 @@
 
 
 
-    <!-- /#page-content-wrapper -->
+  <!-- /#page-content-wrapper -->
 
   </div>
   <!-- /#wrapper -->
