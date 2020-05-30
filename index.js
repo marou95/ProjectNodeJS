@@ -13,10 +13,13 @@ app.post('/sign_up', function(req,res){
     var password = req.body.password; 
     var email =req.body.email;
     
+    var hashedPassword = passwordHash.generate(password);
+    console.log(hashedPassword);
+
     //objet data 
     var data = { 
         "name": name, 
-        "password":password, //Il faudra Hasher le MDP (j'ai installer le packageBcrypt sur le projet  qui dois pouvoir hasher les mdp)
+        "password":hashedPassword, // Hasher le MDP 
         "email":email
     }
 
@@ -142,5 +145,4 @@ app.get('/vendor/bootstrap/js/bootstrap.bundle.min.js', function(req, res) {
 
 
 // on defini le port sur lequel on ecoute
-// server.listen(8080)
 app.listen (8080);

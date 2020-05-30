@@ -81,7 +81,7 @@ async function getProject(name){
                 if (data != undefined){
                     resolve(data);
                 } else {
-                    reject ("error");
+                    reject ("Error");
                 }
             });
         });
@@ -101,7 +101,7 @@ async function deleteProject(){
                 if (err) throw err; 
                 console.log(data.name + " is deleted Successfully"); 
                 db.close();
-                resolve("success");
+                resolve("Success");
             });
         });
     });
@@ -121,7 +121,7 @@ async function insertNewUser(){
                 if (err) throw err; 
                 console.log(data.getName() + " is inserted Successfully"); 
                 db.close();
-                resolve("success");
+                resolve("Success");
             });
         });
     });
