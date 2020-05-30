@@ -28,15 +28,17 @@
       var inputTitle = document.getElementById("InputTitle");
       //on se sert de new dans l'url pour indiqué que c'est un nouveau projet. si un projet s'appel new ca posera problème
       if(inputTitle.value == "new"){
+        console.log("false");
         return false;
       }
-      console.log('<%= projectNameList %>')
       var nameList = '<%= projectNameList %>';
       '<% for(var i = 0; i < projectNameList.length; i++){%>'
       if(inputTitle.value == '<%= projectNameList[i]%>'){
+        console.log("false");
         return false;
       }
       '<%}%>'
+      console.log("true");
       return true;
     }
 
