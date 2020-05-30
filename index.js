@@ -37,7 +37,8 @@ app.post('/sign_up', function(req,res){
     });
     
 }); 
- 
+
+//sauvegarde un projet (nouveau ou pas), champs : titre , personList
 app.post('/save_project/:name', function(req,res){
     
     var title = req.body.title;
@@ -81,11 +82,13 @@ app.get('/my-projects', function(req, res) {
     });
 });
 
-app.get('/tasks', function(req, res) {
-
-    res.render("tasks.ejs");
+app.get('/tasks/:name', function(req, res) {
+    request.getProject(req.params.name).then((project) => {
+        res.render("tasks.ejs",{project: project});
+    });
 });
 
+//if et else car si nouveau projet titre modifiable
 app.get('/project/:name', function(req, res) {
     if(req.params.name == 'new'){
         console.log("new project !");
@@ -103,14 +106,16 @@ app.get('/task-detail', function(req, res) {
     res.render("taskDetail.ejs");
 });
 
-app.get('/conversation', function(req, res) {
-
-    res.render("conversation.ejs");
+app.get('/conversation/:name', function(req, res) {
+    request.getProject(req.params.name).then((project) => {
+        res.render("conversation.ejs",{project: project});
+    });
 });
 
-app.get('/Git-commit', function(req, res) {
-
-    res.render("gitCommit.ejs");
+app.get('/Git-commit/:name', function(req, res) {
+    request.getProject(req.params.name).then((project) => {
+        res.render("gitCommit.ejs",{project: project});
+    });
 });
 app.get('/signup_success', function(req, res) {
 

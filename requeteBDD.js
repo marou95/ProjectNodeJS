@@ -74,12 +74,13 @@ async function getProject(name){
             var dbo = db.db(DATABASE);
             if (err) throw err;
             // Ajout du user (obj data) en base
-            dbo.collection(PROJECT_COL).findOne({name: name}, function(err, data){ 
+            dbo.collection(PROJECT_COL).findOne({name: name}, function(err, projet){ 
                 if (err) throw err; 
                 console.log( name + " found !"); 
+                console.log(projet);
                 db.close();
-                if (data != undefined){
-                    resolve(data);
+                if (projet != undefined){
+                    resolve(projet);
                 } else {
                     reject ("Error");
                 }
