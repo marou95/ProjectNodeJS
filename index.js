@@ -90,15 +90,23 @@ app.get('/tasks/:name', function(req, res) {
 
 //if et else car si nouveau projet titre modifiable
 app.get('/project/:name', function(req, res) {
-    if(req.params.name == 'new'){
-        console.log("new project !");
-        res.render("project.ejs",{project: req.params.name});
-    }
-    else{
-        request.getProject(req.params.name).then((project) => {
-            res.render("project.ejs",{project: project});
-        });
-    }
+    request.getAllProject().then((projects) => {
+        var projectNameList = [];
+        for(var i = 0; i < projects.length; i++){
+            projectNameList[i] = projects[i].name;
+        }
+
+        if(req.params.name == 'new'){
+            console.log("new project !");
+            res.render("project.ejs",{project: req.params.name, projectNameList: projectNameList});
+            
+        }
+        else{
+            request.getProject(req.params.name).then((project) => {
+                res.render("project.ejs",{project: project, projectNameList: projectNameList});
+            });
+        }
+    });
 });
 
 app.get('/task-detail', function(req, res) {

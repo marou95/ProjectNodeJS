@@ -22,6 +22,57 @@
 
 <body>
 
+  <script>
+    function isUniq(){
+      console.log("isUniq");
+      var inputTitle = document.getElementById("InputTitle");
+      //on se sert de new dans l'url pour indiqué que c'est un nouveau projet. si un projet s'appel new ca posera problème
+      if(inputTitle.value == "new"){
+        return false;
+      }
+      console.log('<%= projectNameList %>')
+      var nameList = '<%= projectNameList %>';
+      '<% for(var i = 0; i < projectNameList.length; i++){%>'
+      if(inputTitle.value == '<%= projectNameList[i]%>'){
+        return false;
+      }
+      '<%}%>'
+      return true;
+    }
+
+    //lorsque l'on modifie la valeur du titre dans le formulaire vérifie si déjà prit
+    function displayValidationOfTitle(){
+      console.log("displayValidationOfTitle");
+      var inputTitle = document.getElementById("InputTitle");
+      //appel la fonction isUniq vérifiant si la value dans le formulaire est égale à un des nom de projectNameList
+      var verif = isUniq();
+      if(verif){
+        console.log("valid");
+        //affiche en vert le champs pour confirmer
+        return inputTitle.className = "form-control is-valid";
+      } else {
+        console.log("invalid");
+        //affiche le champs en rouge pour indiquer la non correspondance
+        return inputTitle.className = "form-control is-invalid";
+      }
+    }
+
+    //est appelé lorsque l'on clique sur save
+    function validation(){
+      console.log("validation");
+      //si formulaire d'un nouveau projet
+      if(document.formNew){
+        //il faut vérifier que le titre n'existe pas déjà en base avant de submit
+        if(isUniq()){
+          document.formNew.submit();
+        }
+      //c'est un projet existant donc pas besoin de vérifier le titre dans ce formulaire
+      } else {
+        document.formExist.submit();
+      }
+    }
+  </script>
+  
   <div class="d-flex" id="wrapper">
     <!-- HEADER -->
 
@@ -49,9 +100,9 @@
 
 <div class="container">
   <% if(project == "new"){ %>
-  <form action="/save_project/new" method="POST">
+  <form action="/save_project/new" method="POST" name="formNew">
   <% } else { %>
-  <form action="/save_project/<%= project.name %>" method="POST">
+  <form action="/save_project/<%= project.name %>" method="POST" name="formExist">
   <% } %>
     <!-- marge top-->
   <div class="row mt-5">
@@ -67,7 +118,7 @@
       <!-- si c'est un nouveau projet le titre est modifiable-->
       <% if(project == "new"){ %>
         <div class="form-group">
-          <input type="text" class="form-control" id="InputTitle" name="title" />
+          <input onchange="displayValidationOfTitle()" type="text" class="form-control" id="InputTitle" name="title" required/>
         </div>
       <% } else { %>
       <%= project.name %>
@@ -100,7 +151,7 @@
     </div>
     <div class="col-8">
       <div class="form-group text-center">
-          <input type="submit" id="save"  name="save" value="save" class="btn btn-primary"/>
+          <input onclick="validation()" type="button" id="save"  name="save" value="save" class="btn btn-primary"/>
       </div>
     </div>
     <div class="col-2">
