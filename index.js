@@ -137,10 +137,13 @@ io.on('connection', function(socket) {
     
     socket.emit('announcements', { message: 'A new user has joined!' });
 
+    //quand 
     socket.on('newmsg', function(data) {
         console.log("c'est arrivé au serveur je renvoie");
         var messageObj = {author: "toto", message: data.message}
+        //broadcast.emit => tout le monde sauf l'émetteur
         socket.broadcast.emit('receivedmsg', messageObj);
+        //emit => que à l'émetteur
         socket.emit('receivedmymsg', messageObj);
     });
 });
