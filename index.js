@@ -2,6 +2,8 @@ var request= require("./requeteBDD");
 var express=require("express");
 var app=express();  
 var bodyParser=require("body-parser");
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
  
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/Projet-Trello";
@@ -130,6 +132,18 @@ app.get('/signup_success', function(req, res) {
     res.render("signup_success.ejs");
 });
 
+//socket.io
+io.on('connection', function(socket) {
+    
+    socket.emit('announcements', { message: 'A new user has joined!' });
+
+    socket.on('newmsg', function(data) {
+        console.log("c'est arrivé au serveur je renvoie");
+        var messageObj = {author: "toto", message: data.message}
+        socket.broadcast.emit('receivedmsg', messageObj);
+        socket.emit('receivedmymsg', messageObj);
+    });
+});
 
 
 
@@ -158,4 +172,4 @@ app.get('/vendor/bootstrap/js/bootstrap.bundle.min.js', function(req, res) {
 
 
 // on defini le port sur lequel on ecoute
-app.listen (8080);
+server.listen (8080);

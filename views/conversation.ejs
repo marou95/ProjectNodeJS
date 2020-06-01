@@ -3,6 +3,8 @@
 
 <head>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -71,7 +73,7 @@
           <!-- marge à gauche-->
           <div class="col-2">
           </div>
-          <div class="col-8 text-left">
+          <div class="col-8 text-left" id="text-flow">
             <div class="d-flex flex-row mt-2 ">
               <div class="p-2 bg-secondary rounded-left">Henry :</div>
               <div class="p-2 bg-secondary rounded-right">Bonjour à tous ! Ce qui est dit reste tout le temps inutile de chercher</div>
@@ -93,10 +95,10 @@
               <div class="col-1">
               </div>
               <div class="col-8 text-right">
-                <input type="text" class="form-control" placeholder="Écrire un message" />
+                <input type="text" id="textinput" class="form-control" placeholder="Écrire un message" />
               </div>
               <div class="col-1">
-                <input type="button" class="btn btn-primary" value="Envoyer"/>
+                <input type="button" id="button" class="btn btn-primary" value="Envoyer"/>
               </div>
               <div class="col-1">
               </div>
@@ -124,6 +126,38 @@
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
     });
+
+    var socket = io.connect('/');
+       
+    socket.on('announcements', function(data) {
+        console.log('Got announcement:', data.message);
+    });
+
+	  socket.on('receivedmsg', function(data) {
+      console.log("j'ai recu le message renvoyer a tous !");
+      var balStart = "<div class=\"d-flex flex-row mt-2 \">";
+      var bal2 = "<div class=\"p-2 bg-secondary rounded-left\">Henry :</div>";
+      var bal3 = "<div class=\"p-2 bg-secondary rounded-right\">"+data.message+"</div>";
+      var balEnd = "</div>"
+      var text = balStart + bal2 + bal3 + balEnd;
+          $("#text-flow").append(text);
+    });
+    
+    socket.on('receivedmymsg', function(data) {
+		  console.log("j'ai recu le message renvoyer a  moi !");
+      var balStart = "<div class=\"d-flex flex-row-reverse mt-2 \">";
+      var bal2 = "<div class=\"p-2 bg-primary rounded-right\">: moi</div>";
+      var bal3 = "<div class=\"p-2 bg-primary rounded-left\">"+data.message+"</div>";
+      var balEnd = "</div>"
+      var text = balStart + bal2 + bal3 + balEnd;
+          $("#text-flow").append(text);
+	  });
+    
+    $("#button").click(function() {
+      console.log("envoie d'un message");       		 
+   		socket.emit("newmsg", {message: $("#textinput").val()});
+    });
+  
   </script>
 
 </body>
