@@ -4,11 +4,15 @@ var app=express();
 var bodyParser=require("body-parser");
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
- 
+
+// EN DUR POUR VERIFIER LE FONCTIONNEMENT
+var NAME = "letest";
+
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/Projet-Trello";
 
 app.use(express.urlencoded({ extended: true }));
+
 
 app.post('/sign_up', function(req,res){ 
     var name = req.body.name;
@@ -80,7 +84,7 @@ app.get('/sign-up', function(req, res) {
 
 app.get('/my-projects', function(req, res) {
     request.getAllProject().then((projects) => {
-        res.render("myProjects.ejs",{projects: projects});
+        res.render("myProjects.ejs",{projects: projects, userName: NAME});
     });
 });
 
@@ -100,8 +104,7 @@ app.get('/project/:name', function(req, res) {
 
         if(req.params.name == 'new'){
             console.log("new project !");
-            res.render("project.ejs",{project: req.params.name, projectNameList: projectNameList});
-            
+            res.render("project.ejs",{project: req.params.name, projectNameList: projectNameList});       
         }
         else{
             request.getProject(req.params.name).then((project) => {
@@ -118,7 +121,7 @@ app.get('/task-detail', function(req, res) {
 
 app.get('/conversation/:name', function(req, res) {
     request.getProject(req.params.name).then((project) => {
-        res.render("conversation.ejs",{project: project});
+        res.render("conversation.ejs",{project: project, userName: NAME});
     });
 });
 
@@ -140,7 +143,8 @@ io.on('connection', function(socket) {
     //quand 
     socket.on('newmsg', function(data) {
         console.log("c'est arrivé au serveur je renvoie");
-        var messageObj = {author: "toto", message: data.message}
+        var messageObj = {author: NAME, message: data.message}
+        request.insertNewMessage(data.group, messageObj)
         //broadcast.emit => tout le monde sauf l'émetteur
         socket.to(data.group).emit('receivedmsg', messageObj);
         //emit => que à l'émetteur

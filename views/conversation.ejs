@@ -74,14 +74,28 @@
           <div class="col-2">
           </div>
           <div class="col-8 text-left" id="text-flow">
-            <div class="d-flex flex-row mt-2 ">
-              <div class="p-2 bg-secondary rounded-left">Henry :</div>
-              <div class="p-2 bg-secondary rounded-right">Bonjour à tous ! Ce qui est dit reste tout le temps inutile de chercher</div>
-            </div>
+            <% 
+            if(project.msgList != undefined){
+              for(var i = 0; i < project.msgList.length; i++){ 
+                if(project.msgList[i].author == userName ){
+            %>
             <div class="d-flex flex-row-reverse mt-2 ">
               <div class="p-2 bg-primary rounded-right">: moi</div>
-              <div class="p-2 bg-primary rounded-left">Hello ! merci de l'information ;)</div>
-            </div>
+              <div class="p-2 bg-primary rounded-left"><%= project.msgList[i].message %></div>
+            </div>   
+            <% 
+                } else {
+            %>
+            <div class="d-flex flex-row mt-2 ">
+              <div class="p-2 bg-secondary rounded-left"><%= project.msgList[i].author %> :</div>
+              <div class="p-2 bg-secondary rounded-right"><%= project.msgList[i].message %></div>
+            </div>   
+            <%
+                }
+              }
+            }
+            %>
+
           </div>
           <div class="col-2">
           </div>

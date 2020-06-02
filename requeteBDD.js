@@ -109,6 +109,23 @@ async function deleteProject(){
 }
 exports.deleteProject = deleteProject;
 
+async function insertNewMessage(projectName, message){
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+            if (err) throw err;
+            var dbo = db.db(DATABASE);
+            if (err) throw err;
+            // Ajout d'un projet (data) en base
+            dbo.collection(PROJECT_COL).updateOne({ name: projectName }, {$push: {msgList: message}},function(err, collection){ 
+                if (err) throw err; 
+                console.log("msgList updated!"); 
+                db.close();
+                resolve("Success");
+            });
+        });
+    });
+}
+exports.insertNewMessage = insertNewMessage;
 
 // non testé
 async function insertNewUser(){

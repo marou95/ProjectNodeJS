@@ -74,12 +74,18 @@
           <table class="table table-striped">
  	          <%
     	        for(var j = 0 ; j < projects.length ; j++) {
+                for(var k = 0; k < projects[j].personList.length; k++){
+                  if(projects[j].personList[k].nameP == userName){
             %>
-              <tr>
-                <td onclick="goToProject('<%= projects[j].name %>')"><%= projects[j].name %></td>
-                <td class="text-right"><a href="/project/<%= projects[j].name%>">Modifier</a></td>
-	            </tr>
-            <% } %>
+                    <tr>
+                      <td onclick="goToProject('<%= projects[j].name %>')"><%= projects[j].name %></td>
+                      <td class="text-right"><a href="/project/<%= projects[j].name%>">Modifier</a></td>
+	                  </tr>
+            <%                
+                  }
+                } 
+              }
+            %>
           </table>
         </div>
         <div class="col-2">
