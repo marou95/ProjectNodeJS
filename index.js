@@ -142,10 +142,17 @@ io.on('connection', function(socket) {
         console.log("c'est arrivé au serveur je renvoie");
         var messageObj = {author: "toto", message: data.message}
         //broadcast.emit => tout le monde sauf l'émetteur
-        socket.broadcast.emit('receivedmsg', messageObj);
+        socket.to(data.group).emit('receivedmsg', messageObj);
         //emit => que à l'émetteur
         socket.emit('receivedmymsg', messageObj);
     });
+
+    socket.on('joinGroup',function(name){
+        socket.join(name);
+        console.log("added to " + name);
+    });
+
+
 });
 
 

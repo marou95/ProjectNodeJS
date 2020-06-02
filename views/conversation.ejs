@@ -130,6 +130,8 @@
     var socket = io.connect('/');
        
     socket.on('announcements', function(data) {
+        socket.emit("joinGroup",'<%= project.name%>');
+        console.log("group ajouté ? ");
         console.log('Got announcement:', data.message);
     });
 
@@ -160,7 +162,7 @@
     //lorsque l'on clique sur envoyer envoie le 'newmsg' au serveur
     $("#button").click(function() {
       console.log("envoie d'un message");       		 
-   		socket.emit("newmsg", {message: $("#textinput").val()});
+   		socket.emit("newmsg", {message: $("#textinput").val(), group: '<%= project.name%>'});
     });
   
   </script>
