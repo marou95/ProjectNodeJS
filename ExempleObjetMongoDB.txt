@@ -1,0 +1,38 @@
+{
+	"_id":{
+		"$oid":"5ed173bab3fe172a647cff4e"
+	},
+	"name":"test",
+	"tasksList":[
+		{
+		"nameT":"12345",
+		"descT":"le test du siecle",
+		"status":"todo",
+		"assignee":"prout",
+		"tags":[
+			"Critical",
+			"Development"
+		]
+		}
+	],
+	"personList":[
+		{
+		"nameP":"toto2",
+		"roleP":"member"
+		},
+		{
+		"nameP":"letest",
+		"roleP":"member"
+		}
+	],
+	"msgList":[
+		{
+		"author":"toto2",
+		"message":"premier message"
+		},
+		{
+		"author":"letest",
+		"message":"le second"
+		}
+	]
+}

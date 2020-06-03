@@ -1,4 +1,4 @@
-var request= require("./requeteBDD");
+var request= require("./js/requeteBDD");
 var express=require("express");
 var app=express();  
 var bodyParser=require("body-parser");
