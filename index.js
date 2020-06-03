@@ -44,6 +44,49 @@ app.post('/sign_up', function(req,res){
     
 }); 
 
+app.get('/signup_success', function(req, res) {
+
+    res.render("signup_success.ejs");
+});
+
+//server créé avec Express
+// route des pages
+app.get('/', function(req, res) {
+
+    res.render("index.ejs");
+});
+
+app.get('/sign-up', function(req, res) {
+
+    res.render("signUp.ejs");
+});
+
+app.get('/my-projects', function(req, res) {
+    request.getAllProject().then((projects) => {
+        res.render("myProjects.ejs",{projects: projects, userName: NAME});
+    });
+});
+
+//if et else car si nouveau projet titre modifiable
+app.get('/project/:name', function(req, res) {
+    request.getAllProject().then((projects) => {
+        var projectNameList = [];
+        for(var i = 0; i < projects.length; i++){
+            projectNameList[i] = projects[i].name;
+        }
+
+        if(req.params.name == 'new'){
+            console.log("new project !");
+            res.render("project.ejs",{project: req.params.name, projectNameList: projectNameList});       
+        }
+        else{
+            request.getProject(req.params.name).then((project) => {
+                res.render("project.ejs",{project: project, projectNameList: projectNameList});
+            });
+        }
+    });
+});
+
 //sauvegarde un projet (nouveau ou pas), champs : titre , personList
 app.post('/save_project/:name', function(req,res){
     
@@ -69,55 +112,16 @@ app.post('/save_project/:name', function(req,res){
     }    
 });
 
-
-app.post('/save_task/:name/:task', function(req,res){
-
-    var desc = req.body.description;
-    var status = req.body.status;
-    console.log("PPPPP"+status);
-    var assignee = req.body.assignee;
-    var tag1 = req.body.tag1;
-    var tag2 = req.body.tag2;
-    
-    if(req.params.task == 'new'){
-        var title = req.body.title;
-        var taskObj = {nameT: title, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
-        request.insertNewtask(req.params.name, taskObj).then(
-            res.redirect("/tasks/"+req.params.name)
-            );
-    } else {
-        var taskObj = {nameT: req.params.task, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
-        request.updateExistingTask(req.params.name, taskObj, req.params.task).then(
-            res.redirect("/tasks/"+req.params.name)
-        );
-    }  
-});
-
-
-//server créé avec Express
-// route des pages
-app.get('/', function(req, res) {
-
-    res.render("index.ejs");
-});
-
-app.get('/sign-up', function(req, res) {
-
-    res.render("signUp.ejs");
-});
-
-app.get('/my-projects', function(req, res) {
-    request.getAllProject().then((projects) => {
-        res.render("myProjects.ejs",{projects: projects, userName: NAME});
-    });
-});
-
+//affiche les taches d'un projet
 app.get('/tasks/:name', function(req, res) {
     request.getProject(req.params.name).then((project) => {
+        
         var to_do = [];
         var in_progress = [];
         var done = [];
         var tasksObj;
+        //si des tache pour le projet existe alors les trie (todo, inprogress, done)
+        // l'objet tasksObj contient l'ensemble des taches trié 
         if(project.tasksList != undefined){
             for(var i = 0; i < project.tasksList.length; i++){
                 if(project.tasksList[i].status == "todo"){
@@ -134,32 +138,15 @@ app.get('/tasks/:name', function(req, res) {
     });
 });
 
+
+//formulaire pour modif/creer une tâche
 //if et else car si nouveau projet titre modifiable
-app.get('/project/:name', function(req, res) {
-    request.getAllProject().then((projects) => {
-        var projectNameList = [];
-        for(var i = 0; i < projects.length; i++){
-            projectNameList[i] = projects[i].name;
-        }
-
-        if(req.params.name == 'new'){
-            console.log("new project !");
-            res.render("project.ejs",{project: req.params.name, projectNameList: projectNameList});       
-        }
-        else{
-            request.getProject(req.params.name).then((project) => {
-                res.render("project.ejs",{project: project, projectNameList: projectNameList});
-            });
-        }
-    });
-});
-
 app.get('/task-detail/:name/:task', function(req, res) {
     request.getProject(req.params.name).then((project) => {
         var taskObj;
         if(req.params.task == 'new'){
             console.log("new task !");
-            res.render("taskDetail.ejs",{task: "new", project: project, userName: NAME}); 
+            res.render("taskDetail.ejs",{task: "new", project: project}); 
         } else {
             for(var i = 0; i < project.tasksList.length; i++){
                 if(project.tasksList[i].nameT == req.params.task){
@@ -167,11 +154,36 @@ app.get('/task-detail/:name/:task', function(req, res) {
                     console.log("task found !");
                 }
             }
-            res.render("taskDetail.ejs",{task: taskObj, project: project, userName: NAME});
+            res.render("taskDetail.ejs",{task: taskObj, project: project});
         }
     });
 });
 
+//sauvegarde de nouveau ou tache deja existante
+app.post('/save_task/:name/:task', function(req,res){
+
+    var desc = req.body.description;
+    var status = req.body.status;
+    var assignee = req.body.assignee;
+    var tag1 = req.body.tag1;
+    var tag2 = req.body.tag2;
+    
+    //si new alors le titre viens du formulaire sinon de l'url 
+    if(req.params.task == 'new'){
+        var title = req.body.title;
+        var taskObj = {nameT: title, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
+        request.insertNewtask(req.params.name, taskObj).then(
+            res.redirect("/tasks/"+req.params.name)
+            );
+    } else {
+        var taskObj = {nameT: req.params.task, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
+        request.updateExistingTask(req.params.name, taskObj, req.params.task).then(
+            res.redirect("/tasks/"+req.params.name)
+        );
+    }  
+});
+
+//userName utilisé pour savoir quels sont les messages que nous avons écrit
 app.get('/conversation/:name', function(req, res) {
     request.getProject(req.params.name).then((project) => {
         res.render("conversation.ejs",{project: project, userName: NAME});
@@ -183,27 +195,25 @@ app.get('/Git-commit/:name', function(req, res) {
         res.render("gitCommit.ejs",{project: project});
     });
 });
-app.get('/signup_success', function(req, res) {
-
-    res.render("signup_success.ejs");
-});
 
 //socket.io
 io.on('connection', function(socket) {
     
+    //important car le socket.on coté client appel joinGroup pour avoir des conversation de projet
     socket.emit('announcements', { message: 'A new user has joined!' });
 
-    //quand 
+    //quand on veut envoyer un message
     socket.on('newmsg', function(data) {
         console.log("c'est arrivé au serveur je renvoie");
         var messageObj = {author: NAME, message: data.message}
         request.insertNewMessage(data.group, messageObj)
-        //broadcast.emit => tout le monde sauf l'émetteur
+        //emit au group (chaque groupe correspond à un projet)
         socket.to(data.group).emit('receivedmsg', messageObj);
         //emit => que à l'émetteur
         socket.emit('receivedmymsg', messageObj);
     });
 
+    //ajoute le client dans le groupe projet
     socket.on('joinGroup',function(name){
         socket.join(name);
         console.log("added to " + name);

@@ -164,12 +164,6 @@ async function insertNewtask(projectName, task){
 exports.insertNewtask = insertNewtask;
 
 async function updateExistingTask(projectName, task, taskName){
-    console.log("/////" + task.nameT);
-    console.log("/////" + task.descT);
-    console.log("/////" + task.status);
-    console.log("/////" + task.assignee);
-    console.log("/////" + task.tags[0]);
-    console.log("/////" + task.tags[1]);
     return new Promise((resolve, reject) => {
         MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
             if (err) throw err;
