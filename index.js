@@ -9,7 +9,7 @@ var io = require('socket.io')(server);
 var NAME = "letest";
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/Projet-Trello";
+var url = "mongodb://localhost:27017/Projet-L3";
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,7 +31,7 @@ app.post('/sign_up', function(req,res){
 
     MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
         if (err) throw err;
-        var dbo = db.db("Projet-Trello");
+        var dbo = db.db("Projet-L3");
         if (err) throw err;
         // Ajout du user (obj data) en base
         dbo.collection('users').insertOne(data,function(err, collection){ 

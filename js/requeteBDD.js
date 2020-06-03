@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/Projet-Trello";
-let DATABASE = "Projet-Trello";
+var url = "mongodb://localhost:27017/Projet-L3";
+let DATABASE = "Projet-L3";
 let PROJECT_COL = "projects";
 let USER_COL = "users";
 

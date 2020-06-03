@@ -1,7 +1,4 @@
 {
-	"_id":{
-		"$oid":"5ed173bab3fe172a647cff4e"
-	},
 	"name":"test",
 	"tasksList":[
 		{
