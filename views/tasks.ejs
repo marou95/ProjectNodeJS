@@ -66,14 +66,149 @@
 
 
 <!-- Page Content -->
+      <div class="container">
+  <!-- marge top-->
+        <div class="row mt-5">
+    <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-2">
+            TO DO
+          </div>
+          <div class="col-6">
+            <a href="/task-detail/<%= project.name%>/new">Add task</a>
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+    <!-- marge top-->
+        <div class="row mt-2">
+    <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-8">
+            <table class="table table-striped">
+              <tr class="row">
+                <th class="col-3 text-center">Titre</th>
+                <th class="col-3 text-center">Personne en charge</th>
+                <th class="col-4 text-center">tags</th>
+                <th class="col-2"></th>
+              </tr>
+              <% 
+              if(sortedTasks != undefined){
+                for(var i = 0; i < sortedTasks.todo.length; i++){
+              %>
+              <tr class="row">
+                <td class="col-3 text-center"><%= sortedTasks.todo[i].nameT %></td>
+                <td class="col-3 text-center"><%= sortedTasks.todo[i].assignee %></td>
+                <td class="col-2 text-center"><%= sortedTasks.todo[i].tags[0] %></td>
+                <td class="col-2 text-center"><%= sortedTasks.todo[i].tags[1] %></td>
+                <td class="col-2 text-center"><a href="/task-detail/<%= project.name%>/<%= sortedTasks.todo[i].nameT%>">Modifier</a></td>
+              </tr>
+              <% 
+                }
+              }
+              %>
+            </table>
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
 
- 
+        <div class="row mt-5">
+        <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-8">
+            IN PROGRESS
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+        <!-- marge top-->
+        <div class="row mt-2">
+        <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-8">
+            <table class="table table-striped">
+              <tr class="row">
+                <th class="col-3 text-center">Titre</th>
+                <th class="col-3 text-center">Personne en charge</th>
+                <th class="col-4 text-center">tags</th>
+                <th class="col-2"></th>
+              </tr>
+              <% 
+              if(sortedTasks != undefined){
+                for(var i = 0; i < sortedTasks.inprogress.length; i++){
+              %>
+              <tr class="row">
+                <td class="col-3 text-center"><%= sortedTasks.inprogress[i].nameT %></td>
+                <td class="col-3 text-center"><%= sortedTasks.inprogress[i].assignee %></td>
+                <td class="col-2 text-center"><%= sortedTasks.inprogress[i].tags[0] %></td>
+                <td class="col-2 text-center"><%= sortedTasks.inprogress[i].tags[1] %></td>
+                <td class="col-2 text-center"><a href="/task-detail/<%= project.name%>/<%= sortedTasks.inprogress[i].nameT%>">Modifier</a></td>
+              </tr>
+              <% 
+                }
+              }
+              %>
+            </table>
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-8">
+            DONE
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+        <!-- marge top-->
+        <div class="row mt-2">
+          <!-- marge à gauche-->
+          <div class="col-2">
+          </div>
+          <div class="col-8">
+            <table class="table table-striped">
+              <tr class="row">
+                <th class="col-3 text-center">Titre</th>
+                <th class="col-3 text-center">Personne en charge</th>
+                <th class="col-4 text-center">tags</th>
+                <th class="col-2"></th>
+              </tr>
+              <% 
+              if(sortedTasks != undefined){
+                for(var i = 0; i < sortedTasks.done.length; i++){
+              %>
+              <tr class="row">
+                <td class="col-3 text-center"><%= sortedTasks.done[i].nameT %></td>
+                <td class="col-3 text-center"><%= sortedTasks.done[i].assignee %></td>
+                <td class="col-2 text-center"><%= sortedTasks.done[i].tags[0] %></td>
+                <td class="col-2 text-center"><%= sortedTasks.done[i].tags[1] %></td>
+                <td class="col-2 text-center"><a href="/task-detail/<%= project.name%>/<%= sortedTasks.done[i].nameT%>">Modifier</a></td>
+              </tr>
+              <% 
+                }
+              }
+              %>
+            </table>
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+        
 
 
 
-    <!-- /#page-content-wrapper -->
+      <!-- /#page-content-wrapper -->
 
-  </div>
+      </div>
   <!-- /#wrapper -->
 </div>
   <!-- Bootstrap core JavaScript -->

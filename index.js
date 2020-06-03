@@ -90,7 +90,23 @@ app.get('/my-projects', function(req, res) {
 
 app.get('/tasks/:name', function(req, res) {
     request.getProject(req.params.name).then((project) => {
-        res.render("tasks.ejs",{project: project});
+        var to_do = [];
+        var in_progress = [];
+        var done = [];
+        var tasksObj;
+        if(project.taskList != undefined){
+            for(var i = 0; i < project.taskList.length; i++){
+                if(project.taskList[i].status == "todo"){
+                    to_do.push(project.taskList[i]);  
+                } else if(project.taskList[i].status == "inprogress"){
+                    in_progress.push(project.taskList[i]);  
+                } else {
+                    done.push(project.taskList[i]);  
+                }          
+            }
+            tasksObj = {todo: to_do, inprogress: in_progress, done: done};
+        }
+        res.render("tasks.ejs",{project: project, sortedTasks: tasksObj});
     });
 });
 
@@ -114,9 +130,10 @@ app.get('/project/:name', function(req, res) {
     });
 });
 
-app.get('/task-detail', function(req, res) {
-
-    res.render("taskDetail.ejs");
+app.get('/task-detail/:name/:task', function(req, res) {
+    request.getProject(req.params.name).then((project) => {
+        res.render("taskDetail.ejs",{project: project, userName: NAME});
+    });
 });
 
 app.get('/conversation/:name', function(req, res) {
