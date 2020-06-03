@@ -70,6 +70,30 @@ app.post('/save_project/:name', function(req,res){
 });
 
 
+app.post('/save_task/:name/:task', function(req,res){
+
+    var desc = req.body.description;
+    var status = req.body.status;
+    console.log("PPPPP"+status);
+    var assignee = req.body.assignee;
+    var tag1 = req.body.tag1;
+    var tag2 = req.body.tag2;
+    
+    if(req.params.task == 'new'){
+        var title = req.body.title;
+        var taskObj = {nameT: title, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
+        request.insertNewtask(req.params.name, taskObj).then(
+            res.redirect("/tasks/"+req.params.name)
+            );
+    } else {
+        var taskObj = {nameT: req.params.task, descT: desc, status: status, assignee: assignee,tags: [tag1,tag2]};
+        request.updateExistingTask(req.params.name, taskObj, req.params.task).then(
+            res.redirect("/tasks/"+req.params.name)
+        );
+    }  
+});
+
+
 //server créé avec Express
 // route des pages
 app.get('/', function(req, res) {
@@ -94,14 +118,14 @@ app.get('/tasks/:name', function(req, res) {
         var in_progress = [];
         var done = [];
         var tasksObj;
-        if(project.taskList != undefined){
-            for(var i = 0; i < project.taskList.length; i++){
-                if(project.taskList[i].status == "todo"){
-                    to_do.push(project.taskList[i]);  
-                } else if(project.taskList[i].status == "inprogress"){
-                    in_progress.push(project.taskList[i]);  
+        if(project.tasksList != undefined){
+            for(var i = 0; i < project.tasksList.length; i++){
+                if(project.tasksList[i].status == "todo"){
+                    to_do.push(project.tasksList[i]);  
+                } else if(project.tasksList[i].status == "inprogress"){
+                    in_progress.push(project.tasksList[i]);  
                 } else {
-                    done.push(project.taskList[i]);  
+                    done.push(project.tasksList[i]);  
                 }          
             }
             tasksObj = {todo: to_do, inprogress: in_progress, done: done};
@@ -132,7 +156,19 @@ app.get('/project/:name', function(req, res) {
 
 app.get('/task-detail/:name/:task', function(req, res) {
     request.getProject(req.params.name).then((project) => {
-        res.render("taskDetail.ejs",{project: project, userName: NAME});
+        var taskObj;
+        if(req.params.task == 'new'){
+            console.log("new task !");
+            res.render("taskDetail.ejs",{task: "new", project: project, userName: NAME}); 
+        } else {
+            for(var i = 0; i < project.tasksList.length; i++){
+                if(project.tasksList[i].nameT == req.params.task){
+                    taskObj = project.tasksList[i];
+                    console.log("task found !");
+                }
+            }
+            res.render("taskDetail.ejs",{task: taskObj, project: project, userName: NAME});
+        }
     });
 });
 

@@ -145,3 +145,44 @@ async function insertNewUser(){
     });
 }
 
+async function insertNewtask(projectName, task){
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+            if (err) throw err;
+            var dbo = db.db(DATABASE);
+            if (err) throw err;
+            // Ajout de task (obj task) en base
+            dbo.collection(PROJECT_COL).updateOne({ name: projectName }, {$push: {tasksList: task}},function(err, collection){ 
+                if (err) throw err; 
+                console.log("inserted new task to tasksList!"); 
+                db.close();
+                resolve("Success");
+            });
+        });
+    });
+}
+exports.insertNewtask = insertNewtask;
+
+async function updateExistingTask(projectName, task, taskName){
+    console.log("/////" + task.nameT);
+    console.log("/////" + task.descT);
+    console.log("/////" + task.status);
+    console.log("/////" + task.assignee);
+    console.log("/////" + task.tags[0]);
+    console.log("/////" + task.tags[1]);
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+            if (err) throw err;
+            var dbo = db.db(DATABASE);
+            if (err) throw err;
+            // Ajout de task (obj task) en base
+            dbo.collection(PROJECT_COL).updateOne({ name: projectName, "tasksList.nameT": taskName}, {$set: {"tasksList.$": task}},function(err, collection){ 
+                if (err) throw err; 
+                console.log("task in tasksList updated!"); 
+                db.close();
+                resolve("Success");
+            });
+        });
+    });
+}
+exports.updateExistingTask = updateExistingTask;

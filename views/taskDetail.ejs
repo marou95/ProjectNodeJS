@@ -22,6 +22,58 @@
 
 <body>
 
+  <script>
+    function isUniq(){
+      console.log("isUniq");
+      var inputTitle = document.getElementById("InputTitle");
+      //on se sert de new dans l'url pour indiqué que c'est un nouveau projet. si un projet s'appel new ca posera problème
+      if(inputTitle.value == "new"){
+        console.log("false");
+        return false;
+      }
+      '<% for(var i = 0; i < project.tasksList.length; i++){%>'
+      if(inputTitle.value == '<%= project.tasksList[i].nameT%>'){
+        console.log("false");
+        return false;
+      }
+      '<%}%>'
+      console.log("true");
+      return true;
+    }
+
+    //lorsque l'on modifie la valeur du titre dans le formulaire vérifie si déjà prit
+    function displayValidationOfTitle(){
+      console.log("displayValidationOfTitle");
+      var inputTitle = document.getElementById("InputTitle");
+      //appel la fonction isUniq vérifiant si la value dans le formulaire est égale à un des nom de projectNameList
+      var verif = isUniq();
+      if(verif){
+        console.log("valid");
+        //affiche en vert le champs pour confirmer
+        return inputTitle.className = "form-control is-valid";
+      } else {
+        console.log("invalid");
+        //affiche le champs en rouge pour indiquer la non correspondance
+        return inputTitle.className = "form-control is-invalid";
+      }
+    }
+
+    //est appelé lorsque l'on clique sur save
+    function validation(){
+      console.log("validation");
+      //si formulaire d'un nouveau projet
+      if(document.formNew){
+        //il faut vérifier que le titre n'existe pas déjà en base avant de submit
+        if(isUniq()){
+          document.formNew.submit();
+        }
+      //c'est un projet existant donc pas besoin de vérifier le titre dans ce formulaire
+      } else {
+        document.formExist.submit();
+      }
+    }
+  </script>
+
   <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
@@ -67,7 +119,194 @@
 <!-- Page Content -->
 
  
+<div class="container">
+  <% if(task == "new"){ %>
+  <form action="/save_task/<%= project.name %>/new" method="POST" name="formNew">
+  <% } else { %>
+  <form action="/save_task/<%= project.name %>/<%= task.nameT%>" method="POST" name="formExist">
+  <% } %>
+    <!-- marge top-->
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Title : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+      <!-- si c'est un nouveau projet le titre est modifiable-->
+      <% if(task == "new"){ %>
+        <div class="form-group">
+          <input onchange="displayValidationOfTitle()" type="text" class="form-control" id="InputTitle" name="title" required/>
+        </div>
+      <% } else { %>
+      <%= task.nameT%>
+      <% } %>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+   
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Description : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+          <textarea class="form-control" rows="3" id="InputDescription" name="description" ><%= task.descT%></textarea>
+        </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
 
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Status : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <select class="form-control" id="status" name="status">
+          <%    if(task.status == "todo"){   %>   <option value="todo" selected="selected">To Do</option>
+          <%    } else {    %>    <option value="todo">To Do</option>   <%    }   %>
+          <%    if(task.status == "inprogress"){   %>   <option value="inprogress" selected="selected">In Progress</option>
+          <%    } else {    %>    <option value="inprogress">In Progress</option>   <%    }   %>
+          <%    if(task.status == "done"){   %>   <option value="done" selected="selected">Done</option>
+          <%    } else {    %>    <option value="done">Done</option>   <%    }   %>
+        </select>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      Personne assigné : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+          <input type="text" class="form-control" id="InputAssignee" name="assignee" value='<%= task.assignee%>'/>
+        </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-1">
+    </div>
+    <div class="col-2 text-right">
+      tag : 
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+      <div class="form-group">
+        <select class="form-control" id="tag1" name="tag1">
+          <option></option>
+          <%  if(task == "new"){  %>
+            <option>Critical</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          <%  } else {  %>
+            <%    if(task.tags[0] == "Critical"){   %>   <option selected="selected">Critical</option>
+            <%    } else {    %>    <option>Critical</option>   <%    }   %>
+            <%    if(task.tags[0] == "High"){   %>   <option selected="selected">High</option>
+            <%    } else {    %>    <option>High</option>   <%    }   %>
+            <%    if(task.tags[0] == "Medium"){   %>   <option selected="selected">Medium</option>
+            <%    } else {    %>    <option>Medium</option>   <%    }   %>
+            <%    if(task.tags[0] == "Low"){   %>   <option selected="selected">Low</option>
+            <%    } else {    %>    <option>Low</option>   <%    }   %>
+          <%  }  %>
+        </select>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="form-group">
+        <select class="form-control" id="tag2" name="tag2">
+          <option></option>
+          <%  if(task == "new"){  %>
+            <option>Development</option>
+            <option>Unitary test</option>
+            <option>Integration</option>
+            <option>Documentation</option>
+          <%  } else {  %>
+            <%    if(task.tags[1] == "Development"){   %>   <option selected="selected">Development</option>
+            <%    } else {    %>    <option>Development</option>   <%    }   %>
+            <%    if(task.tags[1] == "Unitary test"){   %>   <option selected="selected">Unitary test</option>
+            <%    } else {    %>    <option>Unitary test</option>   <%    }   %>
+            <%    if(task.tags[1] == "Integration"){   %>   <option selected="selected">Integration</option>
+            <%    } else {    %>    <option>Integration</option>   <%    }   %>
+            <%    if(task.tags[1] == "Documentation"){   %>   <option selected="selected">Documentation</option>
+            <%    } else {    %>    <option>Documentation</option>   <%    }   %>
+          <%  } %>
+        </select>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+
+
+<!-- 
+
+FORM A FAIRE POUR LES CHAMPS DE LA TACHE AUTRE QUE LE TITRE
+
+-->
+
+
+
+
+
+
+
+  <!-- marge top-->
+  <div class="row mt-5">
+    <!-- marge à gauche-->
+    <div class="col-2">
+    </div>
+    <div class="col-8">
+      <div class="form-group text-center">
+          <input onclick="validation()" type="button" id="save"  name="save" value="save" class="btn btn-primary"/>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <div class="row">
+    <!-- marge à gauche-->
+    <div class="col-2">
+    </div>
+    <div class="col-8">
+      <div class="form-group  text-center">
+        <a href="/tasks/<%= project.name %>">Cancel</a>
+      </div>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  </form>
+  </div>
 
 
     <!-- /#page-content-wrapper -->
