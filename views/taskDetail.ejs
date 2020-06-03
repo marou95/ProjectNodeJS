@@ -23,6 +23,7 @@
 <body>
 
   <script>
+    //vérifie via les donné précédemment récupéré si le nome de tache est unique
     function isUniq(){
       console.log("isUniq");
       var inputTitle = document.getElementById("InputTitle");
@@ -179,6 +180,7 @@
     <div class="col-6">
       <div class="form-group">
         <select class="form-control" id="status" name="status">
+          <!-- nécessaire pour définir la valeur sélectionner pour préremplir formulaire -->
           <%    if(task.status == "todo"){   %>   <option value="todo" selected="selected">To Do</option>
           <%    } else {    %>    <option value="todo">To Do</option>   <%    }   %>
           <%    if(task.status == "inprogress"){   %>   <option value="inprogress" selected="selected">In Progress</option>
@@ -229,6 +231,7 @@
             <option>Medium</option>
             <option>Low</option>
           <%  } else {  %>
+            <!-- nécessaire pour définir la valeur sélectionner pour préremplir formulaire -->
             <%    if(task.tags[0] == "Critical"){   %>   <option selected="selected">Critical</option>
             <%    } else {    %>    <option>Critical</option>   <%    }   %>
             <%    if(task.tags[0] == "High"){   %>   <option selected="selected">High</option>
@@ -251,6 +254,7 @@
             <option>Integration</option>
             <option>Documentation</option>
           <%  } else {  %>
+            <!-- nécessaire pour définir la valeur sélectionner pour préremplir formulaire -->
             <%    if(task.tags[1] == "Development"){   %>   <option selected="selected">Development</option>
             <%    } else {    %>    <option>Development</option>   <%    }   %>
             <%    if(task.tags[1] == "Unitary test"){   %>   <option selected="selected">Unitary test</option>
@@ -266,19 +270,6 @@
     <div class="col-2">
     </div>
   </div>
-
-
-<!-- 
-
-FORM A FAIRE POUR LES CHAMPS DE LA TACHE AUTRE QUE LE TITRE
-
--->
-
-
-
-
-
-
 
   <!-- marge top-->
   <div class="row mt-5">

@@ -24,23 +24,6 @@ async function insertNewProject(data){
 }
 exports.insertNewProject = insertNewProject;
 
-async function defineNewMemberList(projectName, newMemberList){
-    return new Promise((resolve, reject) => {
-        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
-            if (err) throw err;
-            var dbo = db.db(DATABASE);
-            if (err) throw err;
-            // défini la personLlist du projet ayant pour nom projectName
-            dbo.collection(PROJECT_COL).updateOne({ name: projectName }, {$set: {personList: newMemberList}},function(err, collection){ 
-                if (err) throw err; 
-                console.log("personList updated!"); 
-                db.close();
-                resolve("Success");
-            });
-        });
-    });
-}
-exports.defineNewMemberList = defineNewMemberList;
 
 async function getAllProject(){
     return new Promise((resolve, reject) => {
@@ -109,6 +92,26 @@ async function deleteProject(){
 }
 exports.deleteProject = deleteProject;
 
+
+async function defineNewMemberList(projectName, newMemberList){
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+            if (err) throw err;
+            var dbo = db.db(DATABASE);
+            if (err) throw err;
+            // défini la personLlist du projet ayant pour nom projectName
+            dbo.collection(PROJECT_COL).updateOne({ name: projectName }, {$set: {personList: newMemberList}},function(err, collection){ 
+                if (err) throw err; 
+                console.log("personList updated!"); 
+                db.close();
+                resolve("Success");
+            });
+        });
+    });
+}
+exports.defineNewMemberList = defineNewMemberList;
+
+
 async function insertNewMessage(projectName, message){
     return new Promise((resolve, reject) => {
         MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
@@ -127,23 +130,6 @@ async function insertNewMessage(projectName, message){
 }
 exports.insertNewMessage = insertNewMessage;
 
-// non testé
-async function insertNewUser(){
-    return new Promise((resolve, reject) => {
-        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
-            if (err) throw err;
-            var dbo = db.db(DATABASE);
-            if (err) throw err;
-            // Ajout du user (obj data) en base
-            dbo.collection(USER_COL).insertOne(data,function(err, collection){ 
-                if (err) throw err; 
-                console.log(data.getName() + " is inserted Successfully"); 
-                db.close();
-                resolve("Success");
-            });
-        });
-    });
-}
 
 async function insertNewtask(projectName, task){
     return new Promise((resolve, reject) => {
@@ -180,3 +166,22 @@ async function updateExistingTask(projectName, task, taskName){
     });
 }
 exports.updateExistingTask = updateExistingTask;
+
+
+// non testé et non utilisé
+async function insertNewUser(){
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
+            if (err) throw err;
+            var dbo = db.db(DATABASE);
+            if (err) throw err;
+            // Ajout du user (obj data) en base
+            dbo.collection(USER_COL).insertOne(data,function(err, collection){ 
+                if (err) throw err; 
+                console.log(data.getName() + " is inserted Successfully"); 
+                db.close();
+                resolve("Success");
+            });
+        });
+    });
+}

@@ -145,7 +145,6 @@
        
     socket.on('announcements', function(data) {
         socket.emit("joinGroup",'<%= project.name%>');
-        console.log("group ajouté ? ");
         console.log('Got announcement:', data.message);
     });
 
