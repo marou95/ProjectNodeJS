@@ -32,12 +32,13 @@
         console.log("false");
         return false;
       }
+      '<% if(project.taskList != undefined){ %>'
       '<% for(var i = 0; i < project.tasksList.length; i++){%>'
       if(inputTitle.value == '<%= project.tasksList[i].nameT%>'){
         console.log("false");
         return false;
       }
-      '<%}%>'
+      '<%}}%>'
       console.log("true");
       return true;
     }
