@@ -66,44 +66,29 @@ app.post('/sign_up', function(req,res){
         "email":email
     }
 
-//Ajout utilisateur en base via le signup form
-MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
-    if (err) throw err;
-    var dbo = db.db("Projet-Trello");
-
-    //recherche dans la base si le username existe deja
-    dbo.collection('users').findOne({name : name}, function(err, result) {
-        if(err) throw err;
-        if(result){ //Si le username existe deja..
-            console.log("Found: "+name);
-            res.send('<script>alert("This username is already taken.")</script>');
-           // res.redirect('/signup');
-        }  
-        else{ //Sinon l'ajouter à la bdd
-            console.log("Not found: "+name);
-            dbo.collection('users').insertOne(data,function(err, collection){ 
-                res.redirect('/');
-                db.close();
-            });
-               
-        } 
-    
-
+    //Ajout utilisateur en base via le signup form
     MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
         if (err) throw err;
         var dbo = db.db("Projet-L3");
-        if (err) throw err;
-        // Ajout du user (obj data) en base
-        dbo.collection('users').insertOne(data,function(err, collection){ 
-            if (err) throw err; 
-            console.log("Record inserted Successfully"); 
-            db.close();
-            res.redirect('/');
-        });
-    });
-    
+
+        //recherche dans la base si le username existe deja
+        dbo.collection('users').findOne({name : name}, function(err, result) {
+            if(err) throw err;
+            if(result){ //Si le username existe deja..
+                console.log("Found: "+name);
+                res.send('<script>alert("This username is already taken.")</script>');
+                // res.redirect('/signup');
+            }  
+            else{ //Sinon l'ajouter à la bdd
+                console.log("Not found: "+name);
+                dbo.collection('users').insertOne(data,function(err, collection){ 
+                    res.redirect('/');
+                    db.close();
+                });
+                
+            } 
+        }); 
     }); 
-}); 
 });
 
 app.get('/signup_success', function(req, res) {
