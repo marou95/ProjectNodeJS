@@ -180,14 +180,14 @@ app.post('/connexion', function (req, res) {
                     
                     else {
                         console.log('1');
-                        //res.redirect('/sign-up');
+                        res.redirect('/sign-up');
                         //res.send(undefinded);
                         
                     }
                 
             } else {
                 console.log('2');
-                //res.redirect('/sign-up');
+                res.redirect('/sign-up');
                 //res.send(undefinded);
                 
             }
