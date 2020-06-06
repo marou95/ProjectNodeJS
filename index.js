@@ -16,7 +16,7 @@ var MongoClient = mongo.MongoClient;
 var JSONGit;
  
 // EN DUR POUR VERIFIER LE FONCTIONNEMENT
-var NAME = "letest";
+var NAME = "autre";
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/Projet-L3";
@@ -147,7 +147,7 @@ app.post('/connexion', function (req, res) {
         //connexion a la db 
         MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) { 
             if (err) throw err;
-            var dbo = db.db("Projet-Trello");
+            var dbo = db.db("Projet-L3");
         dbo.collection('users').findOne({ name: name }, function (err, user) {  //requete pour trouver le user par son name
             if (user) {  // si on trouve un user ET si le le mdp correcpond au hash en base
                     if (passwordHash.verify(password, user.password)) {
